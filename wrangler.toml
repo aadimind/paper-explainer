@@ -8,7 +8,7 @@ binding = "AI"
 [[d1_databases]]
 binding = "DB"
 database_name = "paper-explainer-db"
-database_id = "REPLACE_WITH_REAL_D1_DATABASE_ID"
+database_id = "766d1c63-d58e-4fa8-8ac1-40f97f82cf62"
 
 [[kv_namespaces]]
 binding = "KV"
