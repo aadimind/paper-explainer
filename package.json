@@ -12,7 +12,7 @@
     "db:remote": "wrangler d1 execute paper-explainer-db --remote --file=./schema.sql"
   },
   "devDependencies": {
-    "vitest": "5.0.1",
-    "wrangler": "4.135.0"
+    "vitest": "*",
+    "wrangler": "*"
   }
 }
