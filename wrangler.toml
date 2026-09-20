@@ -1,4 +1,4 @@
-name = "paper-explainer-api"
+name = "paper-explainer"
 main = "src/index.js"
 compatibility_date = "2026-09-21"
 
@@ -12,7 +12,7 @@ database_id = "REPLACE_WITH_REAL_D1_DATABASE_ID"
 
 [[kv_namespaces]]
 binding = "KV"
-id = "REPLACE_WITH_REAL_KV_NAMESPACE_ID"
+id = "946a5dc4cfe1453ba245ba7e149b2540"
 
 [vars]
 SITE_NAME = "Paper Explained"
