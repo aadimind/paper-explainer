@@ -30,8 +30,61 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
+      - name: Create local CI configuration
+        run: |
+          cat > wrangler.ci.toml <<'EOF'
+          name = "paper-explainer-ci"
+          main = "src/index.js"
+          compatibility_date = "2026-09-21"
+
+          [ai]
+          binding = "AI"
+
+          [[d1_databases]]
+          binding = "DB"
+          database_name = "paper-explainer-db"
+          database_id = "00000000-0000-4000-8000-000000000001"
+
+          [[kv_namespaces]]
+          binding = "KV"
+          id = "00000000-0000-4000-8000-000000000002"
+
+          [vars]
+          SITE_NAME = "Paper Explained CI"
+          SITE_URL = "http://127.0.0.1:8787"
+          ALLOWED_ORIGIN = "http://127.0.0.1:8787"
+          EOF
+
+      - name: Initialize local D1
+        run: npx wrangler d1 execute paper-explainer-db --local --config=wrangler.ci.toml --file=schema.sql
+
+      - name: Start local Worker
+        run: |
+          nohup npx wrangler dev --local --config=wrangler.ci.toml --ip=127.0.0.1 --port=8787 > wrangler-ci.log 2>&1 &
+          echo $! > wrangler-ci.pid
+
+      - name: Wait for Worker
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error http://127.0.0.1:8787/api/papers > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat wrangler-ci.log
+          exit 1
+
+      - name: Run smoke tests
+        env:
+          SMOKE_BASE_URL: http://127.0.0.1:8787
         run: npm test
+
+      - name: Stop local Worker
+        if: always()
+        run: |
+          if [ -f wrangler-ci.pid ]; then
+            kill "$(cat wrangler-ci.pid)" 2>/dev/null || true
+          fi
 
   deploy-worker:
     name: Deploy Worker
