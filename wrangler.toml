@@ -1,0 +1,22 @@
+name = "paper-explainer-api"
+main = "src/index.js"
+compatibility_date = "2026-09-21"
+
+[ai]
+binding = "AI"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "paper-explainer-db"
+database_id = "REPLACE_WITH_REAL_D1_DATABASE_ID"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "REPLACE_WITH_REAL_KV_NAMESPACE_ID"
+
+[vars]
+SITE_NAME = "Paper Explained"
+SITE_URL = "https://paper-explainer-api.workers.dev"
+ALLOWED_ORIGIN = "https://yourusername.github.io"
+
+[ai] binding Worker में env.AI उपलब्ध कराता है, और D1/KV bindings इसी तरह Worker environment में resources expose करते हैं.
